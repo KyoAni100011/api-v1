@@ -2,6 +2,7 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  port: 3306
 
 development:
   <<: *default
@@ -18,24 +19,8 @@ test:
   host: 172.20.0.1
 
 production:
-  primary: &primary_production
-    <<: *default
-    database: <%= ENV["DB_NAME"] %>
-    username: <%= ENV["DB_USER"] %>
-    password: <%= ENV["DB_PASSWORD"] %>
-    host: <%= ENV["DB_HOST"] %>
-
-  cache:
-    <<: *primary_production
-    database: <%= ENV["DB_CACHE"] %>
-    migrations_paths: db/cache_migrate
-
-  queue:
-    <<: *primary_production
-    database: <%= ENV["DB_QUEUE"] %>
-    migrations_paths: db/queue_migrate
-
-  cable:
-    <<: *primary_production
-    database: <%= ENV["DB_CABLE"] %>
-    migrations_paths: db/cable_migrate
+  <<: *default
+  database: <%= ENV["DB_NAME"] %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV["DB_HOST"] %>
