@@ -68,8 +68,6 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares database
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Expose port
 EXPOSE 80
 
-# Start Rails
-CMD ["./bin/thrust", "./bin/rails", "server"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
