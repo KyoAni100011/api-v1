@@ -1,35 +1,41 @@
 default: &default
   adapter: mysql2
   encoding: utf8mb4
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: 123123
-  host: 172.20.0.1
-  socket: /var/run/mysqld/mysqld.sock
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
   <<: *default
   database: dev
+  username: root
+  password: 123123
+  host: 172.20.0.1
 
 test:
   <<: *default
   database: test
+  username: root
+  password: 123123
+  host: 172.20.0.1
 
 production:
   primary: &primary_production
     <<: *default
-    database: api_v1_production
-    username: api_v1
-    password: <%= ENV["API_V1_DATABASE_PASSWORD"] %>
+    database: <%= ENV["DB_NAME"] %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+
   cache:
     <<: *primary_production
-    database: api_v1_production_cache
+    database: <%= ENV["DB_CACHE"] %>
     migrations_paths: db/cache_migrate
+
   queue:
     <<: *primary_production
-    database: api_v1_production_queue
+    database: <%= ENV["DB_QUEUE"] %>
     migrations_paths: db/queue_migrate
+
   cable:
     <<: *primary_production
-    database: api_v1_production_cable
+    database: <%= ENV["DB_CABLE"] %>
     migrations_paths: db/cable_migrate
